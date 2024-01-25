@@ -4,7 +4,7 @@ RadWet-L ALOS-2 PALSAR-2 ScanSAR Classification
 These Scripts are used for classifing ALOS-2 PALSAR-2 ScanSAR tiles, as produced by the K&C project. To run these Scripts you will need the following directory Structure:
 
 Mapping
-> applyXGBoostClassificationImgs_Bins.py
+\n> applyXGBoostClassificationImgs_Bins.py
 > genClassApplication_Bins.py
 > Cycle_Dates.csv
 > mergeOrbitCycles_V2.py
