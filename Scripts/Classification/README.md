@@ -30,13 +30,13 @@ This shell script will contain the python call to the 'applyXGBoostClassificatio
 To run the classifier use the command: bash classJob.sh
 
 Dependencies:
-python3.9
-pandas
-xgboost
-rios
-sklearn
-rsgislib
-numba
+<br />python3.9
+<br />pandas
+<br />xgboost
+<br />rios
+<br />sklearn
+<br />rsgislib
+<br />numba
 
 A ready built-cross platform conda environment is provided in the file: radwet.yml
 
