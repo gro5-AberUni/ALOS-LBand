@@ -13,11 +13,11 @@ Mapping:
 <br />&emsp;HydroData:
 <br />&emsp;&emsp;&emsp;&emsp;Hand_MERIT-Amazon_COG.tif
 <br />&emsp;&emsp;&emsp;&emsp;Slope-Amazon_COG.tif
-<br />&emsp;InputTiles 
+<br />&emsp;InputTiles:
 <br />&emsp;&emsp;&emsp;&emsp;'This is where you would store ALOS Tiles for classification'
-<br />&emsp;LCC
+<br />&emsp;LCC:
 <br />&emsp;&emsp;&emsp;&emsp;Combined_LCC-GFC_LY-16_Binary_COG.tif
-<br />&emsp;Model
+<br />&emsp;Model:
 <br />&emsp;&emsp;&emsp;&emsp;Scaler_Flood.pkl
 <br />&emsp;&emsp;&emsp;&emsp;Scaler_Water.pkl
 <br />&emsp;&emsp;&emsp;&emsp;Trained_XGBoostModel_02_Amazon_Flood.model
