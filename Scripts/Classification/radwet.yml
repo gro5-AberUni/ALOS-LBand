@@ -1,0 +1,9 @@
+name: radwet
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - rios
+  - rsgislib
+  - numba
+prefix: /home/greg/miniconda3/envs/radwet
