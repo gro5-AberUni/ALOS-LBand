@@ -355,7 +355,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    cwd = os.getcwd()
+    cwd = "/data"#os.getcwd()
 
     cores = args.j
 
