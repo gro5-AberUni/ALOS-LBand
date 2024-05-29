@@ -6,7 +6,7 @@ from osgeo import gdal
 
 cwd = os.getcwd()
 
-listComps = glob.glob('./InputTiles/*.zip')
+listComps = glob.glob('/data/InputTiles/*.zip')
 
 listCmds = []
 for comp in listComps:
