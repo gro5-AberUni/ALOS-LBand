@@ -33,7 +33,7 @@ for index, row in datesPD.iterrows():
             print('No Classified Image Found')
         os.chdir(cwd)
 
-    classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
+    classFile = '/data/Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
         rsgislib.imageutils.create_img_mosaic(listMergeFiles, classFile, 0, 0, 1,1, 'GTIFF', 1)
 
