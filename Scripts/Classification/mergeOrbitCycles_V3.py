@@ -23,7 +23,7 @@ for index, row in datesPD.iterrows():
     elif orbitCycle < 100:
         orbitCycle = '0{0}'.format(orbitCycle)
     print(orbitCycle)
-    listOrbitRowsClassDirs = glob.glob('ALOS-Output*C{0}'.format(orbitCycle))
+    listOrbitRowsClassDirs = glob.glob('/data/ALOS-Output*C{0}'.format(orbitCycle))
     listMergeFiles = []
     for dir in listOrbitRowsClassDirs:
         os.chdir(dir)
