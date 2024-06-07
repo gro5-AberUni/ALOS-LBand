@@ -35,7 +35,7 @@ for comp in listComps:
     scalerFlood = os.path.abspath('./Model/Scaler_Flood.pkl')
     waterModel = os.path.abspath('./Model/Trained_XGBoostModel_02_Amazon_Water.model')
     floodModel = os.path.abspath('./Model/Trained_XGBoostModel_02_Amazon_Flood.model')
-    lcc = os.path.abspath('./LCC/Combined_LCC-GFC_LY-16_Binary_COG.tif')
+    lcc = os.path.abspath('./LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif')
     aoi = os.path.abspath('./AOI/South_America_AOI.geojson')
     
     cmd = 'python3 applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi)
