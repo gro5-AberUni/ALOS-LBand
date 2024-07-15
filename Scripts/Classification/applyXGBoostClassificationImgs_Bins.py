@@ -352,8 +352,8 @@ if __name__ == "__main__":
     parser.add_argument('-lc', metavar='', type=str, help='Landcover')
     parser.add_argument('-v', metavar='', type=str, help='Basin AOI')
 
-    parser.add_argument('-lc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
-    parser.add_argument('-mc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
+    parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
+    parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
 
     parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
 
@@ -373,8 +373,8 @@ if __name__ == "__main__":
 
     obSize = args.os
 
-    lowBackscatterNumClumps = args.lc
-    mainBackscatterNumClumps = args.mc
+    lowBackscatterNumClumps = args.lnc
+    mainBackscatterNumClumps = args.mnc
     
     form = 'KEA'
     dtype = rsgislib.TYPE_32FLOAT
