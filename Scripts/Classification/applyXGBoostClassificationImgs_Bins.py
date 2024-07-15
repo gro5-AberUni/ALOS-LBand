@@ -352,6 +352,11 @@ if __name__ == "__main__":
     parser.add_argument('-lc', metavar='', type=str, help='Landcover')
     parser.add_argument('-v', metavar='', type=str, help='Basin AOI')
 
+    parser.add_argument('-lc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
+    parser.add_argument('-mc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
+
+    parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
+
 
     args = parser.parse_args()
 
@@ -366,8 +371,11 @@ if __name__ == "__main__":
     modelCMF = args.cmf
 
 
-    obSize = 5
+    obSize = args.os
 
+    lowBackscatterNumClumps = args.lc
+    mainBackscatterNumClumps = args.mc
+    
     form = 'KEA'
     dtype = rsgislib.TYPE_32FLOAT
 
@@ -619,33 +627,27 @@ if __name__ == "__main__":
 
     gdalSave(alosEpoch, [lowBackscatterHV_HH,lowBackscatterHV_HV,lowBackscatterHV_NDPI], lowBSImgHV, 'GTIFF')
 
-    try:
+    segmentedImageLowBS = segment([lowBSImgHV, lowBackscatterNumClumps, obSize, 10, False])
 
-        segmentedImageLowBS = segment([lowBSImgHV, 20, obSize, 10, False])
-
-        segmentedImageALOS = segment([alosEpoch, 250, obSize, 10, False])
+    segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, 10, False])
 
 
-        alosEpochMrg = segmentedImageALOS.replace('.kea','Merge_Clumps.kea')
 
-        rsgislib.segmentation.union_of_clumps([segmentedImageLowBS,segmentedImageALOS], alosEpochMrg, 'KEA', 0, True)
+    alosEpochMrg = segmentedImageALOS.replace('.kea','Merge_Clumps.kea')
 
-        rsgislib.rastergis.pop_rat_img_stats(alosEpochMrg, True, True,True, 1)
+    rsgislib.segmentation.union_of_clumps([segmentedImageLowBS,segmentedImageALOS], alosEpochMrg, 'KEA', 0, True)
 
-        alosEpochRe = alosEpochMrg.replace('.kea', '_Re.kea')
+    rsgislib.rastergis.pop_rat_img_stats(alosEpochMrg, True, True,True, 1)
 
-        rsgislib.segmentation.rm_small_clumps_stepwise(alosEpoch, alosEpochMrg, alosEpochRe, 'KEA', False,
-                                                       '', False, True, 10,100000000000000)
+    alosEpochRe = alosEpochMrg.replace('.kea', '_Re.kea')
 
-        rsgislib.rastergis.pop_rat_img_stats(alosEpochRe, True, True,True, 1)
+    rsgislib.segmentation.rm_small_clumps_stepwise(alosEpoch, alosEpochMrg, alosEpochRe, 'KEA', False,
+                                                   '', False, True, 10,100000000000000)
 
-        segmentedImage=alosEpochRe
+    rsgislib.rastergis.pop_rat_img_stats(alosEpochRe, True, True,True, 1)
 
-    except:
-        try:
-            segmentedImage = segment([alosEpoch, 150, obSize, 10, False])
-        except:
-            segmentedImage = segment([alosEpoch, 50, obSize, 10, False])
+    segmentedImage=alosEpochRe
+
     try:
 
         alosEpoch = extractTraining([segmentedImage, alosEpoch, slopeRe, hand])
