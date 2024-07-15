@@ -2,6 +2,17 @@ import os
 import glob
 from osgeo import ogr
 from osgeo import gdal
+import argparse
+
+parser = argparse.ArgumentParser(prog='Processing of SALOS ScanSAR images')
+parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
+parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
+parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
+args = parser.parse_args()
+
+obSize = args.os
+lowBackscatterNumClumps = args.lnc
+mainBackscatterNumClumps = args.mnc
 
 
 cwd = os.getcwd()
@@ -38,7 +49,8 @@ for comp in listComps:
     lcc = os.path.abspath('./LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif')
     aoi = os.path.abspath('./AOI/South_America_AOI.geojson')
     
-    cmd = 'python3 applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi)
+    # cmd = 'python3 applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi)
+    cmd = 'python applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8} -lnc {9} -mnc {10} -os {11}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi,lowBackscatterNumClumps,mainBackscatterNumClumps,obSize)
     listCmds.append(cmd)
 
     os.chdir(cwd)
