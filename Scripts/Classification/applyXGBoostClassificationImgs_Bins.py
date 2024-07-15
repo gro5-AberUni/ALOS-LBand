@@ -785,6 +785,7 @@ if __name__ == "__main__":
         shutil.copy(classifiedImageSieveSlopeM,outputDir)
         os.chdir(cwd)
         shutil.rmtree(workspace)
+        shutil.move(outputDir, '/data/')
     except:
         print('There Has Been An Error')
         os.chdir(cwd)
