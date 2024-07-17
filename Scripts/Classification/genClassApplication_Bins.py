@@ -39,8 +39,8 @@ for comp in listComps:
     mnth = compDate[4:6]
     print(mnth)
 
-    hand = os.path.abspath('./HydroData/Hand_MERIT-Amazon_COG.tif')
-    slope = os.path.abspath('./HydroData/Slope-Amazon_COG.tif')
+    hand = os.path.abspath('./HydroData/Hand_Merit-SouthAmerica_COG.tif')
+    slope = os.path.abspath('./HydroData/Slope-SouthAmerica_COG.tif')
 
     scalerWater = os.path.abspath('./Model/Scaler_Water.pkl')
     scalerFlood = os.path.abspath('./Model/Scaler_Flood.pkl')
