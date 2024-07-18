@@ -48,7 +48,7 @@ def fill(corrMetaData,currArr,prevArr,change,outArr):
 						   np.where(corrMetaData == 4, prevArr, np.where(corrMetaData == change, outArr, 0)))
 	return filledArray
 
-listFiles = glob.glob('Classified*Sub.tif')
+listFiles = glob.glob('Classified*.tif')
 sortListFiles = sorted(listFiles)
 
 
