@@ -6,7 +6,7 @@ from rsgislib import imageutils
 
 csvDates = 'Cycle_Dates_TS.csv'
 
-aoiRast = './AOI/Valid_Area_South_America_Fill-NoData.kea'
+aoiRast = '/data/ALOS_ENV/AOI/Valid_Area_South_America_Fill-NoData.kea'
 
 datesPD = pd.read_csv(csvDates)
 
