@@ -280,6 +280,7 @@ def segment(args):
     obSize = args[2]
     dt = args[3]
     stretch = args[4]
+    samp = args[5]
     print()
     print("Segmenting: ",inImg)
     print()
@@ -295,7 +296,7 @@ def segment(args):
                                      num_clusters=clusters,
                                      min_n_pxls=obSize,
                                      dist_thres=dt, bands=[1,2,3],
-                                     sampling=100, km_max_iter=50,
+                                     sampling=samp, km_max_iter=50,
                                      process_in_mem=True)
 
     # tmpDir = inImg.replace('.tif','_tmpDir')
@@ -317,13 +318,12 @@ def segment(args):
 
     # rsgislib.segmentation.rm_small_clumps(clumpsImgTemp, clumpsImgTempRe, obSize, 'KEA')
 
-    rsgislib.segmentation.rm_small_clumps_stepwise(inImg, clumpsImgTemp, clumpsImgTempRe, 'KEA', False,
-                                                   '', False, True, obSize,100)
+    #rsgislib.segmentation.rm_small_clumps_stepwise(inImg, clumpsImgTemp, clumpsImgTempRe, 'KEA', False,'', False, True, obSize,100)
 
-    rsgislib.rastergis.pop_rat_img_stats(clumpsImgTempRe, True, True,True, 1)
+    rsgislib.rastergis.pop_rat_img_stats(clumpsImgTemp, True, True,True, 1)
 
 
-    clumpsImg = clumpsImgTempRe
+    clumpsImg = clumpsImgTemp
 
     return clumpsImg
 
@@ -355,6 +355,9 @@ if __name__ == "__main__":
     parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
     parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
 
+    parser.add_argument('-ldt', metavar='', type=int, help='Low Backscatter Distance Threshold. Default is 10', default=10)
+    parser.add_argument('-mdt', metavar='', type=int, help='Main Backscatter Distance Threshold. Default is 10', default=10)
+    
     parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
 
 
@@ -375,6 +378,9 @@ if __name__ == "__main__":
 
     lowBackscatterNumClumps = args.lnc
     mainBackscatterNumClumps = args.mnc
+
+    lowBackscatterDist = args.ldt
+    mainBackscatterDist = args.mdt
     
     form = 'KEA'
     dtype = rsgislib.TYPE_32FLOAT
@@ -627,22 +633,48 @@ if __name__ == "__main__":
 
     gdalSave(alosEpoch, [lowBackscatterHV_HH,lowBackscatterHV_HV,lowBackscatterHV_NDPI], lowBSImgHV, 'GTIFF')
 
-    segmentedImageLowBS = segment([lowBSImgHV, lowBackscatterNumClumps, obSize, 10, False])
+    waterValid = 0
 
-    segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, 10, False])
+    try:
+
+        segmentedImageLowBS = segment([lowBSImgHV, lowBackscatterNumClumps, obSize, lowBackscatterDist, False,1])
+        waterValid = 1
+
+    except:
+
+        errFileName = '/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+        print(errFileName)
+
+        ds = gdal.Open(lowBSImgHV)
+        readLow = np.array(ds.GetRasterBand(1).ReadAsArray())
+        uniquePxls = np.unique(readLow)
+
+        with open(errFileName,'w') as f:
+            f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist))
+
+    try:
+        segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,100])
+
+    except:
+
+        errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+        with open(errFileName,'w') as f:
+            f.write('There has been an error processing this tile in the segmentation phase')
 
 
+    if waterValid == 1:
 
-    alosEpochMrg = segmentedImageALOS.replace('.kea','Merge_Clumps.kea')
+        alosEpochMrg = segmentedImageALOS.replace('.kea','Merge_Clumps.kea')
 
-    rsgislib.segmentation.union_of_clumps([segmentedImageLowBS,segmentedImageALOS], alosEpochMrg, 'KEA', 0, True)
+        rsgislib.segmentation.union_of_clumps([segmentedImageLowBS,segmentedImageALOS], alosEpochMrg, 'KEA', 0, True)
 
-    rsgislib.rastergis.pop_rat_img_stats(alosEpochMrg, True, True,True, 1)
+        rsgislib.rastergis.pop_rat_img_stats(alosEpochMrg, True, True,True, 1)
+    else:
+        alosEpochMrg = segmentedImageALOS
 
-    alosEpochRe = alosEpochMrg.replace('.kea', '_Re.kea')
-
-    rsgislib.segmentation.rm_small_clumps_stepwise(alosEpoch, alosEpochMrg, alosEpochRe, 'KEA', False,
-                                                   '', False, True, 10,100000000000000)
+    #alosEpochRe = alosEpochMrg.replace('.kea', '_Re.kea')
+    alosEpochRe = alosEpochMrg
+    #rsgislib.segmentation.rm_small_clumps_stepwise(alosEpoch, alosEpochMrg, alosEpochRe, 'KEA', False,'', False, True, 10,100000000000000)
 
     rsgislib.rastergis.pop_rat_img_stats(alosEpochRe, True, True,True, 1)
 
