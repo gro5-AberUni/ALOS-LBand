@@ -812,9 +812,13 @@ if __name__ == "__main__":
         clr_lut[5] = '#a7a7a7'
         clr_lut[6] = '#d21255'
 
+        rsgislib.imageutils.define_colour_table(classifiedImageVM, clr_lut)
+        rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
         rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
 
-        shutil.copy(classifiedImageSieveSlopeM,outputDir)
+        shutil.copy(classifiedImageVM, outputDir)
+        shutil.copy(classifiedImageFilt,outputDir)
+        shutil.copy(classifiedImageSieveSlopeM, outputDir)
         os.chdir(cwd)
         shutil.rmtree(workspace)
     except:
