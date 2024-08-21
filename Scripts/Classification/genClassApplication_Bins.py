@@ -18,7 +18,8 @@ args = parser.parse_args()
 obSize = args.os
 lowBackscatterNumClumps = args.lnc
 mainBackscatterNumClumps = args.mnc
-
+lowBackscatterDT = args.ldt
+mainBackscatterDT = args.mdt
 
 cwd = os.getcwd()
 
