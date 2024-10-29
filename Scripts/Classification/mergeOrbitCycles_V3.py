@@ -28,7 +28,7 @@ for index, row in datesPD.iterrows():
     for dir in listOrbitRowsClassDirs:
         os.chdir(dir)
         try:
-            listMergeFiles.append(os.path.abspath(glob.glob('*Classified*.tif')[0]))
+            listMergeFiles.append(os.path.abspath(glob.glob('*Classified*SlopeM.tif')[0]))
         except:
             print('No Classified Image Found')
         os.chdir(cwd)
