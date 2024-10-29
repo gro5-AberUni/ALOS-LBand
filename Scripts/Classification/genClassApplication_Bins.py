@@ -48,22 +48,22 @@ for comp in listComps:
     #### HAND ####
 
     #hand = os.path.abspath('/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif')
-    if os.path.exists('/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif'):
+    if os.path.exists('/data/ALOS_ENV/HydroData/Hand_Tile-21_Re.tif'):
         print('HAND File Found')
-        hand = '/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif'
+        hand = '/data/ALOS_ENV/HydroData/Hand_Tile-21_Re.tif'
     else:
         print('HAND Image Not Found')
-        print('Please Ensure the File: Hand_Merit-SouthAmerica_COG.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: Hand_Tile-21_Re.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Slope ####
 
-    if os.path.exists('/data/ALOS_ENV/HydroData/Slope_SouthAmerica_COG.tif'):
+    if os.path.exists('/data/ALOS_ENV/HydroData/Slope_Tile-21_Re.tif'):
         print('Slope File Found')
-        slope = '/data/ALOS_ENV/HydroData/Slope_SouthAmerica_COG.tif'
+        slope = '/data/ALOS_ENV/HydroData/Slope_Tile-21_Re.tif'
     else:
         print('Slope Image Not Found')
-        print('Please Ensure the File: Slope_SouthAmerica_COG.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: Slope_Tile-21_Re.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### ScalerWater ####
@@ -108,22 +108,22 @@ for comp in listComps:
 
     #### LCC Mask ####
 
-    if os.path.exists('/data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif'):
+    if os.path.exists('/data/ALOS_ENV/LCC/Tile-21_Constant_0.tif'):
         print('Mask Image Found')
-        lcc = '/data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif'
+        lcc = '/data/ALOS_ENV/LCC/Tile-21_Constant_0.tif'
     else:
         print('Mask Image Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif is In the ALOS_ENV/LCC/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_ENV/LCC/Tile-21_Constant_0.tif is In the ALOS_ENV/LCC/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### AOI ####
 
-    if os.path.exists('/data/ALOS_ENV/AOI/South_America_AOI.geojson'):
+    if os.path.exists('/data/ALOS_ENV/AOI/Lake_Chad_AOI.geojson'):
         print('AOI File Found')
-        aoi = '/data/ALOS_ENV/AOI/South_America_AOI.geojson'
+        aoi = '/data/ALOS_ENV/AOI/Lake_Chad_AOI.geojson'
     else:
         print('AOI File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/AOI/South_America_AOI.geojson is In the ALOS_ENV/AOI/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_ENV/AOI/Lake_Chad_AOI.geojson is In the ALOS_ENV/AOI/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     # cmd = 'python3 applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi)
