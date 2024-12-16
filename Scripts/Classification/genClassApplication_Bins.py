@@ -4,6 +4,7 @@ from osgeo import ogr
 from osgeo import gdal
 import argparse
 import sys
+import numpy as np
 
 parser = argparse.ArgumentParser(prog='Processing of SALOS ScanSAR images')
 parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
