@@ -24,7 +24,7 @@ mainBackscatterDT = args.mdt
 
 cwd = os.getcwd()
 
-listCompsRAW = glob.glob('/data/InputTiles/*.zip')
+listCompsRAW = glob.glob('./InputTiles/*.zip')
 
 listCyclesNums = []
 
@@ -85,82 +85,82 @@ for comp in processTiles:
     #### HAND ####
 
     #hand = os.path.abspath('/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif')
-    if os.path.exists('/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif'):
+    if os.path.exists('/data/ALOS_Africa/HydroData/Africa_HAND.tif'):
         print('HAND File Found')
-        hand = '/data/ALOS_ENV/HydroData/Hand_Merit-SouthAmerica_COG.tif'
+        hand = '/data/ALOS_Africa/HydroData/Africa_HAND.tif'
     else:
         print('HAND Image Not Found')
-        print('Please Ensure the File: Hand_Merit-SouthAmerica_COG.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: Africa_HAND is In the ALOS_Africa/HydroData/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Slope ####
 
-    if os.path.exists('/data/ALOS_ENV/HydroData/Slope_SouthAmerica_COG.tif'):
+    if os.path.exists('/data/ALOS_Africa/HydroData/Africa_Slope.tif'):
         print('Slope File Found')
-        slope = '/data/ALOS_ENV/HydroData/Slope_SouthAmerica_COG.tif'
+        slope = '/data/ALOS_Africa/HydroData/Africa_Slope.tif'
     else:
         print('Slope Image Not Found')
-        print('Please Ensure the File: Slope_SouthAmerica_COG.tif is In the ALOS_ENV/HydroData/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: Africa_Slope is In the ALOS_Africa/HydroData/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### ScalerWater ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Scaler_Water.pkl'):
+    if os.path.exists('/data/ALOS_Africa/Model/Scaler_Water.pkl'):
         print('Scaler Water File Found')
-        scalerWater = '/data/ALOS_ENV/Model/Scaler_Water.pkl'
+        scalerWater = '/data/ALOS_Africa/Model/Scaler_Water.pkl'
     else:
         print('Scaler Water Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Scaler_Water.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/Model/Scaler_Water.pkl is In the ALOS_Africa/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Scaler Flood ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Scaler_Flood.pkl'):
+    if os.path.exists('/data/ALOS_Africa/Model/Scaler_Flood.pkl'):
         print('Scaler Flood File Found')
-        scalerFlood = '/data/ALOS_ENV/Model/Scaler_Flood.pkl'
+        scalerFlood = '/data/ALOS_Africa/Model/Scaler_Flood.pkl'
     else:
         print('Scaler Flood Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Scaler_Flood.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/Model/Scaler_Flood.pkl is In the ALOS_Africa/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Water Model ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
+    if os.path.exists('/data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
         print('Water Model File Found')
-        waterModel = '/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model'
+        waterModel = '/data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Water.model'
     else:
         print('Water Model File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Water.model is In the ALOS_Africa/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Water Flood ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
+    if os.path.exists('/data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
         print('Water Model File Found')
-        floodModel = '/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
+        floodModel = '/data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
     else:
         print('Water Model File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/Model/Trained_XGBoostModel_02_Amazon_Flood.model is In the ALOS_Africa/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### LCC Mask ####
 
-    if os.path.exists('/data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif'):
+    if os.path.exists('/data/ALOS_Africa/LCC/Africa_Blank_Mask.tif'):
         print('Mask Image Found')
-        lcc = '/data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif'
+        lcc = '/data/ALOS_Africa/LCC/Africa_Blank_Mask.tif'
     else:
         print('Mask Image Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/LCC/Combined_LCC-GFC_LY-16_Binary_COG_Blank_COG.tif is In the ALOS_ENV/LCC/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/LCC/Africa_Blank_Mask.tif is In the ALOS_Africa/LCC/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### AOI ####
 
-    if os.path.exists('/data/ALOS_ENV/AOI/South_America_AOI.geojson'):
+    if os.path.exists('/data/ALOS_Africa/AOI/Africa_AOI.geojson'):
         print('AOI File Found')
-        aoi = '/data/ALOS_ENV/AOI/South_America_AOI.geojson'
+        aoi = '/data/ALOS_Africa/AOI/Africa_AOI.geojson'
     else:
         print('AOI File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/AOI/South_America_AOI.geojson is In the ALOS_ENV/AOI/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_Africa/AOI/Africa_AOI.geojson is In the ALOS_Africa/AOI/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     # cmd = 'python3 applyXGBoostClassificationImgs_Bins.py -i {0} -j 1 -hd {1} -sl {2} -skw {3} -skf {4} -cmw {5} -cmf {6} -lc {7} -v {8}\n'.format(compFile,hand,slope,scalerWater,scalerFlood,waterModel,floodModel,lcc,aoi)
