@@ -24,7 +24,7 @@ mainBackscatterDT = args.mdt
 
 cwd = os.getcwd()
 
-listCompsRAW = glob.glob('./InputTiles/*.zip')
+listCompsRAW = glob.glob('/data/InputTiles/*.zip')
 
 listCyclesNums = []
 
