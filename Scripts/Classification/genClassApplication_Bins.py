@@ -23,10 +23,46 @@ mainBackscatterDT = args.mdt
 
 cwd = os.getcwd()
 
-listComps = glob.glob('/data/InputTiles/*.zip')
+listCompsRAW = glob.glob('/data/InputTiles/*.zip')
+
+listCyclesNums = []
+
+for compRaw in listCompsRAW:
+    cycleNum = compRaw.split('/')[-1].split('_')[1]
+    listCyclesNums.append(cycleNum)
+uniqueCycles = np.unique(listCyclesNums)
+sortedCycles = sorted(uniqueCycles)
+
+eastingTiles = []
+
+for compRaw in listCompsRAW:
+    eastingNum = compRaw.split('/')[-1].split('_')[0][3:7]
+    eastingTiles.append(eastingNum)
+
+uniqueEastings = np.unique(eastingTiles)
+sortedEastings = sorted(uniqueEastings)
+
+northingTiles = []
+
+for compRaw in listCompsRAW:
+    northingNum = compRaw.split('/')[-1].split('_')[0][0:3]
+    northingTiles.append(northingNum)
+
+uniqueNorthing = np.unique(northingTiles)
+sortedNorthing = sorted(uniqueNorthing)
+
+processTiles = []
+
+for cycle in sortedCycles:
+    for east in sortedEastings:
+        for north in sortedNorthing:
+            inputFiles = glob.glob('/data/InputTiles/{0}{1}*{2}*.zip'.format(north,east,cycle))
+            if len(inputFiles) > 0:
+                for zip in inputFiles:
+                    processTiles.append(zip)
 
 listCmds = []
-for comp in listComps:
+for comp in processTiles:
 
     compFile = os.path.abspath(comp)
 
