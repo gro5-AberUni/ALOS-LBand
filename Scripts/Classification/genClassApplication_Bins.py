@@ -95,12 +95,12 @@ for comp in processTiles:
 
     #### Slope ####
 
-    if os.path.exists('/data/ALOS_Africa/HydroData/Africa_Slope.tif'):
+    if os.path.exists('/data/ALOS_Africa/HydroData/Africa_Slope_Clip_Comp.tif'):
         print('Slope File Found')
-        slope = '/data/ALOS_Africa/HydroData/Africa_Slope.tif'
+        slope = '/data/ALOS_Africa/HydroData/Africa_Slope_Clip_Comp.tif'
     else:
         print('Slope Image Not Found')
-        print('Please Ensure the File: Africa_Slope is In the ALOS_Africa/HydroData/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: Africa_Slope_Clip_Comp.tif is In the ALOS_Africa/HydroData/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### ScalerWater ####
