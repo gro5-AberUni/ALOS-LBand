@@ -642,7 +642,7 @@ if __name__ == "__main__":
 
     except:
 
-        errFileName = '/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+        errFileName = '/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Warn.txt'))
         print(errFileName)
 
         ds = gdal.Open(lowBSImgHV)
