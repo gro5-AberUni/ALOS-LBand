@@ -656,11 +656,20 @@ if __name__ == "__main__":
         segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,100])
 
     except:
+        try:
+            segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,1])
+        except:
+            errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+            with open(errFileName,'w') as f:
+                f.write('There has been an error processing this tile in the segmentation phase - No Sampling')
+            sys.exit()
+    except:
 
         errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
         with open(errFileName,'w') as f:
             f.write('There has been an error processing this tile in the segmentation phase')
-
+        sys.exit()
+        
 
     if waterValid == 1:
 
