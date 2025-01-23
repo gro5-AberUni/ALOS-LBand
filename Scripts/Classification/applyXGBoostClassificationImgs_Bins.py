@@ -664,13 +664,13 @@ if __name__ == "__main__":
                 f.write('There has been an error processing this tile in the segmentation phase - No Sampling')
             shutil.rmtree(workspace)
             sys.exit()
-    except:
+    # except:
 
-        errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
-        with open(errFileName,'w') as f:
-            f.write('There has been an error processing this tile in the segmentation phase')
-        shutil.rmtree(workspace)
-        sys.exit()
+    #     errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+    #     with open(errFileName,'w') as f:
+    #         f.write('There has been an error processing this tile in the segmentation phase')
+    #     shutil.rmtree(workspace)
+    #     sys.exit()
         
 
     if waterValid == 1:
