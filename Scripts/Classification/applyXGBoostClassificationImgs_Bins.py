@@ -650,7 +650,7 @@ if __name__ == "__main__":
         uniquePxls = np.unique(readLow)
 
         with open(errFileName,'w') as f:
-            f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist))
+            f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}\nImage Segmentation is performed on the whole input PALSAR tile.'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist))
 
     try:
         segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,100])
@@ -661,7 +661,7 @@ if __name__ == "__main__":
         except:
             errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
             with open(errFileName,'w') as f:
-                f.write('There has been an error processing this tile in the segmentation phase - No Sampling')
+                f.write('There has been an error processing this tile in the segmentation phase - Processing Could not be performed, even with no pixel sampling')
             shutil.rmtree(workspace)
             sys.exit()
     # except:
