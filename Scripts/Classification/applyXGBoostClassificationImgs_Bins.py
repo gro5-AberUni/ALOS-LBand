@@ -663,7 +663,7 @@ if __name__ == "__main__":
                 segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps/2, obSize, mainBackscatterDist, False,1])
                 errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Warn.txt'))
                 with open(errFileName,'w') as f:
-                    f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}\nImage Segmentation is performed on the whole input PALSAR tile, with: {3} cluster centres.'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist,mainBackscatterNumClumps/2))
+                    f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}\nImage Segmentation is performed on the whole input PALSAR tile, with: {3} cluster centres.'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist,50))
             except:
                 errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
                 with open(errFileName,'w') as f:
