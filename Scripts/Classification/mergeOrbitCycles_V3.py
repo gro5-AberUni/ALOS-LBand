@@ -4,6 +4,8 @@ import os
 import rsgislib
 from rsgislib import imageutils
 
+rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
+
 csvDates = 'Cycle_Dates_TS.csv'
 
 aoiRast = '/data/ALOS_ENV/AOI/Valid_Area_South_America_Fill-NoData.kea'
@@ -37,10 +39,6 @@ for index, row in datesPD.iterrows():
     if len(listOrbitRowsClassDirs)!=0:
         rsgislib.imageutils.create_img_mosaic(listMergeFiles, classFile, 0, 0, 1,1, 'GTIFF', 1)
 
-        outputFileMsk = classFile.replace('.tif','_VM.tif')
-
-        rsgislib.imageutils.mask_img(classFile, aoiRast, outputFileMsk, 'GTIFF', 1, 7,0)
-
         clr_lut = dict()
         clr_lut[0] = '#000000'
         clr_lut[1] = '#6CABDD'
@@ -50,5 +48,5 @@ for index, row in datesPD.iterrows():
         clr_lut[6] = '#d21255'
         clr_lut[7] = '#FFFFFF'
 
-        rsgislib.imageutils.define_colour_table(outputFileMsk, clr_lut)
+        rsgislib.imageutils.define_colour_table(classFile, clr_lut)
 
