@@ -659,11 +659,17 @@ if __name__ == "__main__":
         try:
             segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,1])
         except:
-            errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
-            with open(errFileName,'w') as f:
-                f.write('There has been an error processing this tile in the segmentation phase - Processing Could not be performed, even with no pixel sampling')
-            shutil.rmtree(workspace)
-            sys.exit()
+            try:
+                segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps/2, obSize, mainBackscatterDist, False,1])
+                errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Warn.txt'))
+                with open(errFileName,'w') as f:
+                    f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}\nImage Segmentation is performed on the whole input PALSAR tile, with: {3} cluster centres.'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist,mainBackscatterNumClumps/2))
+            except:
+                errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
+                with open(errFileName,'w') as f:
+                    f.write('There has been an error processing this tile in the segmentation phase - Processing Could not be performed, even with no pixel sampling')
+                shutil.rmtree(workspace)
+                sys.exit()
     # except:
 
     #     errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
