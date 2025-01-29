@@ -355,6 +355,8 @@ if __name__ == "__main__":
     parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
     parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
 
+    parser.add_argument('-bnc', metavar='', type=int, help='Main Backscatter Backup Num Clusters. Default is 50', default=50)
+    
     parser.add_argument('-ldt', metavar='', type=int, help='Low Backscatter Distance Threshold. Default is 10', default=10)
     parser.add_argument('-mdt', metavar='', type=int, help='Main Backscatter Distance Threshold. Default is 10', default=10)
     
@@ -373,6 +375,7 @@ if __name__ == "__main__":
     modelCMW = args.cmw
     modelCMF = args.cmf
 
+    backupClusterCentres = args.bnc
 
     obSize = args.os
 
@@ -660,10 +663,10 @@ if __name__ == "__main__":
             segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,1])
         except:
             try:
-                segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps/2, obSize, mainBackscatterDist, False,1])
+                segmentedImageALOS = segment([alosEpoch, backupClusterCentres, obSize, mainBackscatterDist, False,1])
                 errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Warn.txt'))
                 with open(errFileName,'w') as f:
-                    f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}\nImage Segmentation is performed on the whole input PALSAR tile, with: {3} cluster centres.'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist,50))
+                    f.write('Image Segmentation is performed on the whole input PALSAR tile, with: {0} cluster centres.'.format(backupClusterCentres))
             except:
                 errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
                 with open(errFileName,'w') as f:
