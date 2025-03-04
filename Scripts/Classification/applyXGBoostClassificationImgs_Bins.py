@@ -605,7 +605,7 @@ if __name__ == "__main__":
 
     alosEpoch = alosEpochSlopeM
 
-    shutil.copy(alosEpoch,outputDir)
+    #shutil.copy(alosEpoch,outputDir)
 
     alosEpochVM = alosEpochLCCM.replace('.tif','_Valid_Mask.tif')
 
@@ -649,8 +649,8 @@ if __name__ == "__main__":
         readLow = np.array(ds.GetRasterBand(1).ReadAsArray())
         uniquePxls = np.unique(readLow)
 
-        with open(errFileName,'w') as f:
-            f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist))
+        #with open(errFileName,'w') as f:
+        #    f.write('There has been an error processing this tile in the segmentation phase to find areas of low backscater.\nUnique Pixels: {0}\nNum Clusters: {1}\nDistanceThreshold: {2}'.format(len(uniquePxls),lowBackscatterNumClumps,lowBackscatterDist))
 
     try:
         segmentedImageALOS = segment([alosEpoch, mainBackscatterNumClumps, obSize, mainBackscatterDist, False,100])
@@ -658,8 +658,8 @@ if __name__ == "__main__":
     except:
 
         errFileName ='/data/{0}'.format(alosEpoch.split('/')[-1].replace('.tif','_Error.txt'))
-        with open(errFileName,'w') as f:
-            f.write('There has been an error processing this tile in the segmentation phase')
+        #with open(errFileName,'w') as f:
+        #    f.write('There has been an error processing this tile in the segmentation phase')
 
 
     if waterValid == 1:
@@ -816,8 +816,8 @@ if __name__ == "__main__":
         rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
         rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
 
-        shutil.copy(classifiedImageVM, outputDir)
-        shutil.copy(classifiedImageFilt,outputDir)
+        #shutil.copy(classifiedImageVM, outputDir)
+        #shutil.copy(classifiedImageFilt,outputDir)
         shutil.copy(classifiedImageSieveSlopeM, outputDir)
         os.chdir(cwd)
         shutil.rmtree(workspace)
