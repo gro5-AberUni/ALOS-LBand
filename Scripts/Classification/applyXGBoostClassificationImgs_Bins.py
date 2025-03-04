@@ -838,7 +838,7 @@ if __name__ == "__main__":
         rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
         rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
         
-        rsgislib.imageutils.pop_thmt_img_stats(classifiedImageSieveSlopeM)
+        rsgislib.imageutils.pop_thmt_img_stats(classifiedImageSieveSlopeM,add_clr_tab=False)
         
         #shutil.copy(classifiedImageVM, outputDir)
         #shutil.copy(classifiedImageFilt,outputDir)
