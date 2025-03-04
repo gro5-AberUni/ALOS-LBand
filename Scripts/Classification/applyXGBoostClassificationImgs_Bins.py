@@ -25,6 +25,8 @@ import subprocess
 import zipfile
 import sys
 
+rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
+
 def generateSubArrays(mainArray,windowSize):
     h, w = mainArray.shape
 
@@ -835,7 +837,9 @@ if __name__ == "__main__":
         rsgislib.imageutils.define_colour_table(classifiedImageVM, clr_lut)
         rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
         rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
-
+        
+        rsgislib.imageutils.pop_thmt_img_stats(classifiedImageSieveSlopeM)
+        
         #shutil.copy(classifiedImageVM, outputDir)
         #shutil.copy(classifiedImageFilt,outputDir)
         shutil.copy(classifiedImageSieveSlopeM, outputDir)
