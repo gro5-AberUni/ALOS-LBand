@@ -423,7 +423,7 @@ if __name__ == "__main__":
 
     workspace = '{0}/ALOS-processing_{1}/'.format(cwd,epochDate)
 
-    outputDir = '{0}/ALOS-Output_{1}-{2}'.format(cwd,epochDate,orbitCycle)
+    outputDir = '{0}/ALOS-Output_{1}-{2}_{3}'.format(cwd,epochDate,orbitCycle,rsp)
 
     shutil.copy(args.i, workspace)
 
