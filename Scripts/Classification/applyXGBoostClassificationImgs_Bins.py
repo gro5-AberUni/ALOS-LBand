@@ -397,6 +397,8 @@ if __name__ == "__main__":
     filt=alosEpoch.split('_')[-1].split('.')[0]
     print(filt)
 
+    rsp = alosEpoch.split('_')[2]
+    
     tileLoc = alosEpoch.split('_')[0]
 
     epochDate = epochDate+'-'+tileLoc
@@ -413,9 +415,9 @@ if __name__ == "__main__":
     else:
         os.mkdir('{0}/ALOS-processing_{1}/'.format(cwd,epochDate))
 
-    if os.path.exists('{0}/ALOS-Output_{1}-{2}/'.format(cwd,epochDate,orbitCycle)) == True:
-        shutil.rmtree('{0}/ALOS-Output_{1}-{2}/'.format(cwd,epochDate,orbitCycle))
-        os.mkdir('{0}/ALOS-Output_{1}-{2}/'.format(cwd,epochDate,orbitCycle))
+    if os.path.exists('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp)) == True:
+        shutil.rmtree('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp))
+        os.mkdir('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp))
     else:
         os.mkdir('{0}/ALOS-Output_{1}-{2}/'.format(cwd,epochDate,orbitCycle))
 
