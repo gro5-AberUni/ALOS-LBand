@@ -419,7 +419,7 @@ if __name__ == "__main__":
         shutil.rmtree('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp))
         os.mkdir('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp))
     else:
-        os.mkdir('{0}/ALOS-Output_{1}-{2}/'.format(cwd,epochDate,orbitCycle))
+        os.mkdir('{0}/ALOS-Output_{1}-{2}_{3}/'.format(cwd,epochDate,orbitCycle,rsp))
 
     workspace = '{0}/ALOS-processing_{1}/'.format(cwd,epochDate)
 
