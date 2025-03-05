@@ -70,11 +70,17 @@ for index, row in datesPD.iterrows():
             listOdd.append(rsp)
     print(listEven)
     print(listOdd)
+    
+    uniqueEven = np.unique(listEven)
+    uniqueOdd = np.unique(listOdd)
+
+    print(uniqueEven)
+    print(uniqueOdd)
 
     #### Gather all Even Files ####
 
     listEvenImg = []
-    for evRSP in listEven:
+    for evRSP in uniqueEven:
         listOrbitRowsClassDirs = glob.glob('/data/ALOS-Output*C{0}_{1}'.format(orbitCycle,evRSP))
         for dir in listOrbitRowsClassDirs:
             os.chdir(dir)
@@ -98,24 +104,24 @@ for index, row in datesPD.iterrows():
 
         rsgislib.imageutils.define_colour_table(classFile, clr_lut)
         rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
-                                                
+
 
 
     #### Gather all Odd Files ####
 
     listOddImg = []
-    for oddRSP in listOdd:
+    for oddRSP in uniqueOdd:
         listOrbitRowsClassDirs = glob.glob('/data/ALOS-Output*C{0}_{1}'.format(orbitCycle,oddRSP))
         for dir in listOrbitRowsClassDirs:
             os.chdir(dir)
             try:
-                listEvenImg.append(os.path.abspath(glob.glob('*Classified*SLopeM.tif')[0]))
+                listOddImg.append(os.path.abspath(glob.glob('*Classified*SLopeM.tif')[0]))
             except:
                 print('No Classified Image Found')
             os.chdir(cwd)
         classFile = '/data/Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Odd-RSP.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
-        rsgislib.imageutils.create_img_mosaic(listEvenImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
+        rsgislib.imageutils.create_img_mosaic(listOddImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
 
         clr_lut = dict()
         clr_lut[0] = '#000000'
@@ -128,6 +134,7 @@ for index, row in datesPD.iterrows():
 
         rsgislib.imageutils.define_colour_table(classFile, clr_lut)
         rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
+
         
         
 
