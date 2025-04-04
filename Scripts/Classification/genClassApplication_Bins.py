@@ -105,9 +105,9 @@ for comp in processTiles:
 
     #### ScalerWater ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Scaler_Water.pkl'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Scaler_Water.pkl'):
         print('Scaler Water File Found')
-        scalerWater = '/data/ALOS_ENV/Model/Scaler_Water.pkl'
+        scalerWater = '/opt/ALOS-LBand/Scripts/Classification/Model/Scaler_Water.pkl'
     else:
         print('Scaler Water Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Scaler_Water.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -115,9 +115,9 @@ for comp in processTiles:
 
     #### Scaler Flood ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Scaler_Flood.pkl'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Scaler_Flood.pkl'):
         print('Scaler Flood File Found')
-        scalerFlood = '/data/ALOS_ENV/Model/Scaler_Flood.pkl'
+        scalerFlood = '/opt/ALOS-LBand/Scripts/Classification/Model/Scaler_Flood.pkl'
     else:
         print('Scaler Flood Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Scaler_Flood.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -125,9 +125,9 @@ for comp in processTiles:
 
     #### Water Model ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
         print('Water Model File Found')
-        waterModel = '/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model'
+        waterModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water.model'
     else:
         print('Water Model File Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -135,9 +135,9 @@ for comp in processTiles:
 
     #### Water Flood ####
 
-    if os.path.exists('/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
         print('Water Model File Found')
-        floodModel = '/data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
+        floodModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
     else:
         print('Water Model File Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
