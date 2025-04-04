@@ -704,153 +704,153 @@ if __name__ == "__main__":
 
     segmentedImage=alosEpochRe
 
-    try:
+    #try:
 
-        alosEpoch = extractTraining([segmentedImage, alosEpoch, slopeRe, hand])
+    alosEpoch = extractTraining([segmentedImage, alosEpoch, slopeRe, hand])
 
-        #### Classify Water ####
+    #### Classify Water ####
 
-        listVars = ['HHMean','HVMean','NDPIMean','NDPIstdDev','IncstdDev','SlopeMean','SlopestdDev','HandstdDev']
+    listVars = ['HHMean','HVMean','NDPIMean','NDPIstdDev','IncstdDev','SlopeMean','SlopestdDev','HandstdDev']
 
-        print(listVars)
-
-
-        predictData = pd.DataFrame()
-
-        for var in listVars:
-            print(var)
-            print(alosEpoch)
-            predictData[var] = rios.rat.readColumn(alosEpoch, var, bandNumber=1)
-
-        # scaler = preprocessing.StandardScaler().fit(predictData)
-
-        print(predictData)
-
-        scaler = load(open(scalerPKLWater, 'rb'))
-
-        predictData_scaled = scaler.transform(predictData)
-
-        trainedXGBoostModel = xgb.Booster()
-
-        trainedXGBoostModel.load_model(modelCMW)
-
-        predictDataDMatrix = xgb.DMatrix(predictData_scaled)
-
-        classPrediction = trainedXGBoostModel.predict(predictDataDMatrix)
-
-        classPredictionReclass = np.where(classPrediction==1,2,0)
-
-        classifiedImageWater = 'Classified_Output_Water.tif'
-
-        rios.rat.writeColumn(alosEpoch, 'ClassOutputWater', classPredictionReclass)
-
-        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageWater, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputWater',
-                                                  rat_band=1)
+    print(listVars)
 
 
-        #### Classify Flooded Forest ####
+    predictData = pd.DataFrame()
 
-        listVars = ['HHMean','HVMean','NDPIMean','IncMean']
+    for var in listVars:
+        print(var)
+        print(alosEpoch)
+        predictData[var] = rios.rat.readColumn(alosEpoch, var, bandNumber=1)
 
-        print(listVars)
+    # scaler = preprocessing.StandardScaler().fit(predictData)
 
-        predictData = pd.DataFrame()
+    print(predictData)
 
-        for var in listVars:
-            print(var)
-            print(alosEpoch)
-            predictData[var] = rios.rat.readColumn(alosEpoch, var, bandNumber=1)
+    scaler = load(open(scalerPKLWater, 'rb'))
 
-        # scaler = preprocessing.StandardScaler().fit(predictData)
+    predictData_scaled = scaler.transform(predictData)
 
-        scaler = load(open(scalerPKLFlood, 'rb'))
+    trainedXGBoostModel = xgb.Booster()
 
-        predictData_scaled = scaler.transform(predictData)
+    trainedXGBoostModel.load_model(modelCMW)
 
-        trainedXGBoostModel = xgb.Booster()
+    predictDataDMatrix = xgb.DMatrix(predictData_scaled)
 
-        trainedXGBoostModel.load_model(modelCMF)
+    classPrediction = trainedXGBoostModel.predict(predictDataDMatrix)
 
-        predictDataDMatrix = xgb.DMatrix(predictData_scaled)
+    classPredictionReclass = np.where(classPrediction==1,2,0)
 
-        classPrediction = trainedXGBoostModel.predict(predictDataDMatrix)
+    classifiedImageWater = 'Classified_Output_Water.tif'
 
-    #    classPredictionReclass = np.where(classPrediction==0,4,classPrediction)
+    rios.rat.writeColumn(alosEpoch, 'ClassOutputWater', classPredictionReclass)
 
-        classifiedImageFlood = 'Classified_Output_Flooded_Forest.tif'
-
-        rios.rat.writeColumn(alosEpoch, 'ClassOutputFlood', classPrediction)
-
-        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageFlood, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputFlood',
-                                                  rat_band=1)
-
-        #### Combine Class Outputs ####
-
-        ds = gdal.Open(classifiedImageWater)
-        waterArr = np.array(ds.GetRasterBand(1).ReadAsArray())
-        del ds
-
-        ds = gdal.Open(classifiedImageFlood)
-        floodArr = np.array(ds.GetRasterBand(1).ReadAsArray())
-        del ds
-
-        ds = gdal.Open(lccMaskRe)
-        lccArr = np.array(ds.GetRasterBand(1).ReadAsArray())
-        del ds
+    rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageWater, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputWater',
+                                              rat_band=1)
 
 
-        combArr = waterArr+floodArr
+    #### Classify Flooded Forest ####
 
-        gdalSave(classifiedImageWater,[combArr],'CombinedArr.tif','GTIFF')
+    listVars = ['HHMean','HVMean','NDPIMean','IncMean']
 
-        classOutputArr = np.where(lccArr==0,np.where(waterArr+floodArr==0,4,combArr),0)
+    print(listVars)
 
-        classOutputArrCor = np.where(classOutputArr==3,4,classOutputArr)
+    predictData = pd.DataFrame()
 
-        classCombinedOutput = 'CombinedClass.tif'
+    for var in listVars:
+        print(var)
+        print(alosEpoch)
+        predictData[var] = rios.rat.readColumn(alosEpoch, var, bandNumber=1)
 
-        gdalSave(classifiedImageWater,[classOutputArrCor],classCombinedOutput,'GTIFF')
+    # scaler = preprocessing.StandardScaler().fit(predictData)
 
-        classifiedImageVM = '{0}_Classified.tif'.format(alosEpoch.replace('.kea',''))
-        rsgislib.imageutils.mask_img(classCombinedOutput, alosEpochVM, classifiedImageVM, 'GTIFF', 1, 0, 0)
+    scaler = load(open(scalerPKLFlood, 'rb'))
 
-        classifiedImageFilt = classifiedImageVM.replace('.tif','_Filt.tif')
-        imagefilter.apply_mode_filter(classifiedImageVM, classifiedImageFilt, 3, "GTIFF",1)
+    predictData_scaled = scaler.transform(predictData)
 
-        classifiedImageSieve = classifiedImageFilt.replace('.tif','_Sieve.tif')
-        cmd = 'gdal_sieve.py -st 50 -8 -of GTIFF {0} {1}'.format(classifiedImageFilt,classifiedImageSieve)
+    trainedXGBoostModel = xgb.Booster()
 
-        subprocess.call(cmd,shell=True)
+    trainedXGBoostModel.load_model(modelCMF)
 
-        classifiedImageSieveLCCM = classifiedImageSieve.replace('.tif', '_LCC.tif')
-        rsgislib.imageutils.mask_img(classifiedImageSieve, lccMaskRe, classifiedImageSieveLCCM, 'GTIFF', 1, 5, 1)
+    predictDataDMatrix = xgb.DMatrix(predictData_scaled)
 
-        classifiedImageSieveSlopeM = classifiedImageSieveLCCM.replace('.tif', '_SLopeM.tif')
-        rsgislib.imageutils.mask_img(classifiedImageSieveLCCM, slopeMask, classifiedImageSieveSlopeM, 'GTIFF', 1, 6, 1)
+    classPrediction = trainedXGBoostModel.predict(predictDataDMatrix)
 
-        clr_lut = dict()
-        clr_lut[0] = '#000000'
-        clr_lut[1] = '#6CABDD'
-        clr_lut[2] = '#000080'
-        clr_lut[4] = '#004225'
-        clr_lut[5] = '#a7a7a7'
-        clr_lut[6] = '#d21255'
+#    classPredictionReclass = np.where(classPrediction==0,4,classPrediction)
 
-        rsgislib.imageutils.define_colour_table(classifiedImageVM, clr_lut)
-        rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
-        rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
-        
-        rsgislib.imageutils.pop_thmt_img_stats(classifiedImageSieveSlopeM,add_clr_tab=False)
-        
-        #shutil.copy(classifiedImageVM, outputDir)
-        #shutil.copy(classifiedImageFilt,outputDir)
-        shutil.copy(classifiedImageSieveSlopeM, outputDir)
-        os.chdir(cwd)
-        shutil.rmtree(workspace)
-    except:
-        print('There Has Been An Error')
-        os.chdir(cwd)
-        shutil.rmtree(workspace)
+    classifiedImageFlood = 'Classified_Output_Flooded_Forest.tif'
+
+    rios.rat.writeColumn(alosEpoch, 'ClassOutputFlood', classPrediction)
+
+    rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageFlood, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputFlood',
+                                              rat_band=1)
+
+    #### Combine Class Outputs ####
+
+    ds = gdal.Open(classifiedImageWater)
+    waterArr = np.array(ds.GetRasterBand(1).ReadAsArray())
+    del ds
+
+    ds = gdal.Open(classifiedImageFlood)
+    floodArr = np.array(ds.GetRasterBand(1).ReadAsArray())
+    del ds
+
+    ds = gdal.Open(lccMaskRe)
+    lccArr = np.array(ds.GetRasterBand(1).ReadAsArray())
+    del ds
+
+
+    combArr = waterArr+floodArr
+
+    gdalSave(classifiedImageWater,[combArr],'CombinedArr.tif','GTIFF')
+
+    classOutputArr = np.where(lccArr==0,np.where(waterArr+floodArr==0,4,combArr),0)
+
+    classOutputArrCor = np.where(classOutputArr==3,4,classOutputArr)
+
+    classCombinedOutput = 'CombinedClass.tif'
+
+    gdalSave(classifiedImageWater,[classOutputArrCor],classCombinedOutput,'GTIFF')
+
+    classifiedImageVM = '{0}_Classified.tif'.format(alosEpoch.replace('.kea',''))
+    rsgislib.imageutils.mask_img(classCombinedOutput, alosEpochVM, classifiedImageVM, 'GTIFF', 1, 0, 0)
+
+    classifiedImageFilt = classifiedImageVM.replace('.tif','_Filt.tif')
+    imagefilter.apply_mode_filter(classifiedImageVM, classifiedImageFilt, 3, "GTIFF",1)
+
+    classifiedImageSieve = classifiedImageFilt.replace('.tif','_Sieve.tif')
+    cmd = 'gdal_sieve.py -st 50 -8 -of GTIFF {0} {1}'.format(classifiedImageFilt,classifiedImageSieve)
+
+    subprocess.call(cmd,shell=True)
+
+    classifiedImageSieveLCCM = classifiedImageSieve.replace('.tif', '_LCC.tif')
+    rsgislib.imageutils.mask_img(classifiedImageSieve, lccMaskRe, classifiedImageSieveLCCM, 'GTIFF', 1, 5, 1)
+
+    classifiedImageSieveSlopeM = classifiedImageSieveLCCM.replace('.tif', '_SLopeM.tif')
+    rsgislib.imageutils.mask_img(classifiedImageSieveLCCM, slopeMask, classifiedImageSieveSlopeM, 'GTIFF', 1, 6, 1)
+
+    clr_lut = dict()
+    clr_lut[0] = '#000000'
+    clr_lut[1] = '#6CABDD'
+    clr_lut[2] = '#000080'
+    clr_lut[4] = '#004225'
+    clr_lut[5] = '#a7a7a7'
+    clr_lut[6] = '#d21255'
+
+    rsgislib.imageutils.define_colour_table(classifiedImageVM, clr_lut)
+    rsgislib.imageutils.define_colour_table(classifiedImageFilt, clr_lut)
+    rsgislib.imageutils.define_colour_table(classifiedImageSieveSlopeM, clr_lut)
+    
+    rsgislib.imageutils.pop_thmt_img_stats(classifiedImageSieveSlopeM,add_clr_tab=False)
+    
+    #shutil.copy(classifiedImageVM, outputDir)
+    #shutil.copy(classifiedImageFilt,outputDir)
+    shutil.copy(classifiedImageSieveSlopeM, outputDir)
+    os.chdir(cwd)
+    shutil.rmtree(workspace)
+    # except:
+    #     print('There Has Been An Error')
+    #     os.chdir(cwd)
+    #     shutil.rmtree(workspace)
 
     sys.exit()
 
