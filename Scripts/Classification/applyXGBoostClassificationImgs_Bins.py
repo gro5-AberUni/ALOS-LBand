@@ -710,7 +710,21 @@ if __name__ == "__main__":
 
     #### Classify Water ####
 
-    listVars = ['HHMean','HVMean','NDPIMean','NDPIstdDev','IncstdDev','SlopeMean','SlopestdDev','HandstdDev']
+    bandNames = [
+        'HH',
+        'HV',
+        'NDPI',
+        'Inc',
+        'Slope',
+        'Hand',
+    ]
+
+    statsList = ['Mean', 'stdDev']
+
+    listVars = []
+    for bn in bandNames:
+        for stat in statsList:
+            listVars.append('{0}{1}'.format(bn, stat))
 
     print(listVars)
 
@@ -750,7 +764,21 @@ if __name__ == "__main__":
 
     #### Classify Flooded Forest ####
 
-    listVars = ['HHMean','HVMean','NDPIMean','IncMean']
+    bandNames = [
+        'HH',
+        'HV',
+        'NDPI',
+        'Inc',
+        'Slope',
+        'Hand',
+    ]
+
+    statsList = ['Mean', 'stdDev']
+
+    listVars = []
+    for bn in bandNames:
+        for stat in statsList:
+            listVars.append('{0}{1}'.format(bn, stat))
 
     print(listVars)
 
