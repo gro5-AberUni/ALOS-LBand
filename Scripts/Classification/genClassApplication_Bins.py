@@ -125,22 +125,22 @@ for comp in processTiles:
 
     #### Water Model ####
 
-    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model'):
         print('Water Model File Found')
-        waterModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water.model'
+        waterModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model'
     else:
         print('Water Model File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### Water Flood ####
 
-    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model'):
         print('Water Model File Found')
-        floodModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
+        floodModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model'
     else:
         print('Water Model File Not Found')
-        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
+        print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
         sys.exit()
 
     #### LCC Mask ####
