@@ -239,17 +239,35 @@ def extractTraining(args):
         bs.append(rastergis.BandAttStats(band=1, mean_field='HHMean',std_dev_field='HHstdDev'))
         rastergis.populate_rat_with_stats(args[1], clumpsImg, bs)
 
+        bandPercentiles = []
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=25.0, field_name='HHPer25'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=50.0, field_name='HHPer50'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=75.0, field_name='HHPer75'))
+        rastergis.populate_rat_with_percentiles(args[1], clumpsImg, 1, bandPercentiles)
+
         ## HV ##
 
         bs = []
         bs.append(rastergis.BandAttStats(band=2, mean_field='HVMean', std_dev_field='HVstdDev'))
         rastergis.populate_rat_with_stats(args[1], clumpsImg, bs)
 
+        bandPercentiles = []
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=25.0, field_name='HVPer25'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=50.0, field_name='HVPer50'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=75.0, field_name='HVPer75'))
+        rastergis.populate_rat_with_percentiles(args[1], clumpsImg, 1, bandPercentiles)
+
         ## Cross Pol ##
 
         bs = []
         bs.append(rastergis.BandAttStats(band=3, mean_field='NDPIMean', std_dev_field='NDPIstdDev'))
         rastergis.populate_rat_with_stats(args[1], clumpsImg, bs)
+
+        bandPercentiles = []
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=25.0, field_name='NDPIPer25'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=50.0, field_name='NDPIPer50'))
+        bandPercentiles.append(rastergis.BandAttPercentiles(percentile=75.0, field_name='NDPIPer75'))
+        rastergis.populate_rat_with_percentiles(args[1], clumpsImg, 1, bandPercentiles)
 
         ## Inc Angle ##
 
@@ -354,15 +372,15 @@ if __name__ == "__main__":
     parser.add_argument('-lc', metavar='', type=str, help='Landcover')
     parser.add_argument('-v', metavar='', type=str, help='Basin AOI')
 
-    parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
-    parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
+    parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=10)
+    parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 25', default=25)
 
     parser.add_argument('-bnc', metavar='', type=int, help='Main Backscatter Backup Num Clusters. Default is 50', default=50)
     
     parser.add_argument('-ldt', metavar='', type=int, help='Low Backscatter Distance Threshold. Default is 10', default=10)
     parser.add_argument('-mdt', metavar='', type=int, help='Main Backscatter Distance Threshold. Default is 10', default=10)
     
-    parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
+    parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 15', default=15)
 
 
     args = parser.parse_args()
@@ -710,24 +728,26 @@ if __name__ == "__main__":
     
         #### Classify Water ####
     
-        bandNames = [
-            'HH',
-            'HV',
-            'NDPI',
-            'Inc',
-            'Slope',
-            'Hand',
-        ]
+        # bandNames = [
+        #     'HH',
+        #     'HV',
+        #     'NDPI',
+        #     'Inc',
+        #     'Slope',
+        #     'Hand',
+        # ]
     
-        statsList = ['Mean', 'stdDev']
+        # statsList = ['Mean', 'stdDev']
     
-        listVars = []
-        for bn in bandNames:
-            for stat in statsList:
-                listVars.append('{0}{1}'.format(bn, stat))
+        # listVars = []
+        # for bn in bandNames:
+        #     for stat in statsList:
+        #         listVars.append('{0}{1}'.format(bn, stat))
     
-        print(listVars)
-    
+        # print(listVars)
+
+        listVars = ['HHMean', 'HHstdDev','HHPer25','HHPer50','HHPer75', 'HVMean', 'HVstdDev','HVPer25','HVPer50','HVPer75', 'NDPIMean', 'NDPIstdDev','NDPIPer25','NDPIPer50','NDPIPer75','IncMean','IncstdDev','SlopeMean', 'SlopestdDev','HandMean', 'HandstdDev']
+
     
         predictData = pd.DataFrame()
     
@@ -752,8 +772,9 @@ if __name__ == "__main__":
     
         classPrediction = trainedXGBoostModel.predict(predictDataDMatrix)
     
-        classPredictionReclass = np.where(classPrediction==1,2,0)
-    
+        #classPredictionReclass = np.where(classPrediction==1,2,0)
+        classPredictionReclass = np.where(classPrediction>0.99,2,0)
+        
         classifiedImageWater = 'Classified_Output_Water.tif'
     
         rios.rat.writeColumn(alosEpoch, 'ClassOutputWater', classPredictionReclass)
@@ -764,22 +785,24 @@ if __name__ == "__main__":
     
         #### Classify Flooded Forest ####
     
-        bandNames = [
-            'HH',
-            'HV',
-            'NDPI',
-            'Inc',
-            'Slope',
-            'Hand',
-        ]
+        # bandNames = [
+        #     'HH',
+        #     'HV',
+        #     'NDPI',
+        #     'Inc',
+        #     'Slope',
+        #     'Hand',
+        # ]
     
-        statsList = ['Mean', 'stdDev']
+        # statsList = ['Mean', 'stdDev']
     
-        listVars = []
-        for bn in bandNames:
-            for stat in statsList:
-                listVars.append('{0}{1}'.format(bn, stat))
-    
+        # listVars = []
+        # for bn in bandNames:
+        #     for stat in statsList:
+        #         listVars.append('{0}{1}'.format(bn, stat))
+
+        listVars = ['HHMean', 'HHPer25','HHPer50','HHPer75', 'HVMean', 'NDPIMean', 'NDPIstdDev','IncMean','HandMean']
+
         print(listVars)
     
         predictData = pd.DataFrame()
@@ -825,7 +848,7 @@ if __name__ == "__main__":
         ds = gdal.Open(lccMaskRe)
         lccArr = np.array(ds.GetRasterBand(1).ReadAsArray())
         del ds
-    
+        floodArr = np.where(floodArr>0.99,1,0)
     
         combArr = waterArr+floodArr
     
