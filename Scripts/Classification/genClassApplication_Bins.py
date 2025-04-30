@@ -7,9 +7,9 @@ import sys
 import numpy as np
 
 parser = argparse.ArgumentParser(prog='Processing of SALOS ScanSAR images')
-parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=20)
-parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=250)
-parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=5)
+parser.add_argument('-lnc', metavar='', type=int, help='Low Backscatter Num Clusters. Default is 20', default=10)
+parser.add_argument('-mnc', metavar='', type=int, help='Main Backscatter Num Clusters. Default is 250', default=25)
+parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size. Default is 5', default=15)
 
 parser.add_argument('-ldt', metavar='', type=int, help='Low Backscatter Distance Threshold. Default is 10', default=10)
 parser.add_argument('-mdt', metavar='', type=int, help='Main Backscatter Distance Threshold. Default is 10', default=10)
@@ -125,9 +125,9 @@ for comp in processTiles:
 
     #### Water Model ####
 
-    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V4_Dev.model'):
         print('Water Model File Found')
-        waterModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model'
+        waterModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Water_V4_Dev.model'
     else:
         print('Water Model File Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Water_V3-5_Dev.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -135,9 +135,9 @@ for comp in processTiles:
 
     #### Water Flood ####
 
-    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model'):
+    if os.path.exists('/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V4-2_W-Vars_Dev.model'):
         print('Water Model File Found')
-        floodModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model'
+        floodModel = '/opt/ALOS-LBand/Scripts/Classification/Model/Trained_XGBoostModel_02_Amazon_Flood_V4-2_W-Vars_Dev.model'
     else:
         print('Water Model File Not Found')
         print('Please Ensure the File: /data/ALOS_ENV/Model/Trained_XGBoostModel_02_Amazon_Flood_V3-5_Dev.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
