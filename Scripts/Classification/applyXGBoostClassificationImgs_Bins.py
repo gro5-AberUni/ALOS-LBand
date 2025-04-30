@@ -779,7 +779,7 @@ if __name__ == "__main__":
     
         rios.rat.writeColumn(alosEpoch, 'ClassOutputWater', classPredictionReclass)
     
-        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageWater, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputWater',
+        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageWater, 'GTIFF',9, 'ClassOutputWater',
                                                   rat_band=1)
     
     
@@ -832,7 +832,7 @@ if __name__ == "__main__":
     
         rios.rat.writeColumn(alosEpoch, 'ClassOutputFlood', classPrediction)
     
-        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageFlood, 'GTIFF', rsgislib.TYPE_8INT, 'ClassOutputFlood',
+        rsgislib.rastergis.export_col_to_gdal_img(alosEpoch, classifiedImageFlood, 'GTIFF', 9, 'ClassOutputFlood',
                                                   rat_band=1)
     
         #### Combine Class Outputs ####
