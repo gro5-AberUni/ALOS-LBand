@@ -42,7 +42,7 @@ print(cycleLinkDF)
 
 alosScenes = '/data/ALOS_ENV/InputTiles/20140901-20250531_Amazon_156.csv'
 
-dataLoc = '/data/ALOS_ENV/InputTiles/
+dataLoc = '/data/ALOS_ENV/InputTiles/'
 
 alosDF = pd.read_csv(alosScenes)
 
