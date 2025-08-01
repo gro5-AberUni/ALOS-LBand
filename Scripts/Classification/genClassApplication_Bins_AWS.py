@@ -16,6 +16,9 @@ parser.add_argument('-os', metavar='', type=int, help='Segmentation Object Size.
 parser.add_argument('-ldt', metavar='', type=int, help='Low Backscatter Distance Threshold. Default is 10', default=10)
 parser.add_argument('-mdt', metavar='', type=int, help='Main Backscatter Distance Threshold. Default is 10', default=10)
 
+parser.add_argument('-c', metavar='', type=str, help='Orbit Cycle to Process AWS')
+
+
 args = parser.parse_args()
 
 obSize = args.os
@@ -23,24 +26,20 @@ lowBackscatterNumClumps = args.lnc
 mainBackscatterNumClumps = args.mnc
 lowBackscatterDT = args.ldt
 mainBackscatterDT = args.mdt
-
+c = args.c
 cwd = os.getcwd()
 
 listCmds = []
 
-# listCompsRAW = glob.glob('/data/ALOS_ENV/InputTiles/*.tif')
-#
-#
-#
-# rspLinkFile = '/data/ALOS_ENV/InputTiles/OutputLinkedFiles.csv'
-# rspDataLinkDF = pd.read_csv(rspLinkFile)
-# print(rspDataLinkDF)
-#
+#local = /data
+
+
+
 cycleDatesFile = '/data/ALOS_ENV/Cycle_Dates_TS.csv'
 cycleLinkDF = pd.read_csv(cycleDatesFile)
 print(cycleLinkDF)
 
-alosScenes = '/data/ALOS_ENV/InputTiles/20140901-20250531_Amazon_156.csv'
+alosScenes = '/data/ALOS_ENV/Orbit_Cycles/ALOS-2_PALSAR-2_Central_Amazon_File_List_Orbit_Cycle-{0}_List.csv'.format(c)
 
 dataLoc = '/data/ALOS_ENV/InputTiles/'
 
