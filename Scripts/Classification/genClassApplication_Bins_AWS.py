@@ -41,7 +41,7 @@ print(cycleLinkDF)
 
 alosScenes = '/data/ALOS_ENV/Orbit_Cycles/ALOS-2_PALSAR-2_Central_Amazon_File_List_Orbit_Cycle-{0}_List.csv'.format(c)
 
-dataLoc = '/data/ALOS_ENV/InputTiles/'
+dataLoc = '/data/InputTiles/'
 
 alosDF = pd.read_csv(alosScenes)
 
