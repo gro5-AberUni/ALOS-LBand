@@ -136,9 +136,9 @@ for index, row in alosDF.iterrows():
 
         #### ScalerWater ####
 
-        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Scaler_Water_V6-1.pkl'):
+        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Scaler_Water.pkl'):
             print('Scaler Water File Found')
-            scalerWater = '/opt/ALOS-LBand/Scripts/Model/Scaler_Water_V6-1.pkl'
+            scalerWater = '/opt/ALOS-LBand/Scripts/Model/Scaler_Water.pkl'
         else:
             print('Scaler Water Not Found')
             print('Please Ensure the File: /opt/ALOS-LBand/Scripts/Model/Scaler_Water.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -146,9 +146,9 @@ for index, row in alosDF.iterrows():
 
         #### Scaler Flood ####
 
-        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Scaler_Flood_V6-1.pkl'):
+        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Scaler_Flood.pkl'):
             print('Scaler Flood File Found')
-            scalerFlood = '/opt/ALOS-LBand/Scripts/Model/Scaler_Flood_V6-1.pkl'
+            scalerFlood = '/opt/ALOS-LBand/Scripts/Model/Scaler_Flood.pkl'
         else:
             print('Scaler Flood Not Found')
             print('Please Ensure the File: /opt/ALOS-LBand/Scripts/Model/Scaler_Flood.pkl is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -156,9 +156,9 @@ for index, row in alosDF.iterrows():
 
         #### Water Model ####
 
-        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Water_V6-1_DevLvl2-2.model'):
+        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Water.model'):
             print('Water Model File Found')
-            waterModel = '/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Water_V6-1_DevLvl2-2.model'
+            waterModel = '/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Water.model'
         else:
             print('Water Model File Not Found')
             print('Please Ensure the File: /opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Water_V5_DevLvl2-2.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
@@ -166,9 +166,9 @@ for index, row in alosDF.iterrows():
 
         #### Water Flood ####
 
-        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Flood_V6-1_DevLvl2-2.model'):
+        if os.path.exists('/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Flood.model'):
             print('Water Model File Found')
-            floodModel = '/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Flood_V6-1_DevLvl2-2.model'
+            floodModel = '/opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Flood.model'
         else:
             print('Water Model File Not Found')
             print('Please Ensure the File: /opt/ALOS-LBand/Scripts/Model/Trained_XGBoostModel_02_Amazon_Flood_V5_DevLvl2-2.model is In the ALOS_ENV/Model/ Folder, mounted in the Docker Image Data Location')
