@@ -741,7 +741,7 @@ if __name__ == "__main__":
 
     #### Classify Water ####
 
-    listVars = ['HHMean', 'HHstdDev', 'HVMean', 'HVstdDev','NDPIMean', 'NDPIstdDev','IncMean','IncstdDev','SlopeMean', 'SlopestdDev','HandMean', 'HandstdDev']
+    listVars = ['HHMean', 'HVMean', 'NDPIMean', 'NDPIstdDev','IncstdDev','SlopeMean', 'SlopestdDev', 'HandstdDev']
 
     print(listVars)
 
