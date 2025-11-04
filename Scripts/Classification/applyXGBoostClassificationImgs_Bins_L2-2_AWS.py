@@ -784,7 +784,7 @@ if __name__ == "__main__":
 
     #### Classify Flooded Forest ####
 
-    listVars = ['HHMean', 'HVMean', 'NDPIMean', 'NDPIstdDev', 'IncMean']
+    listVars = ['HHMean', 'HVMean', 'NDPIMean', 'IncMean']
     print(listVars)
     print(alosEpoch)
     predictData = pd.DataFrame()
