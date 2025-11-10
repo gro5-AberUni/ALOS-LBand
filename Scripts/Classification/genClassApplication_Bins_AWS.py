@@ -1,10 +1,6 @@
 import os
-import glob
-from osgeo import ogr
-from osgeo import gdal
 import argparse
 import sys
-import numpy as np
 import pandas as pd
 import datetime
 
@@ -31,19 +27,31 @@ cwd = os.getcwd()
 
 listCmds = []
 
-#local = /data
-
+# local = /data
 
 
 cycleDatesFile = '/data/ALOS_ENV/Cycle_Dates_TS.csv'
-cycleLinkDF = pd.read_csv(cycleDatesFile)
-print(cycleLinkDF)
+if os.path.exists(cycleDatesFile):
+    cycleLinkDF = pd.read_csv(cycleDatesFile)
+    print(cycleLinkDF)
+else:
+    print(f'Cycle Dates File Not Found: {cycleDatesFile}')
+    print('Please Ensure the File: Cycle_Dates_TS.csv is In the ALOS_ENV/ Folder, mounted in the Docker Image Data Location')
+    sys.exit()
 
 alosScenes = '/data/ALOS_ENV/Orbit_Cycles/ALOS-2_PALSAR-2_Central_Amazon_File_List_Orbit_Cycle-{0}_List.csv'.format(c)
 
 dataLoc = '/data/InputTiles/'
 
-alosDF = pd.read_csv(alosScenes)
+if os.path.exists(alosScenes):
+    alosDF = pd.read_csv(alosScenes)
+    print(alosDF)
+else:
+    print(f"Orbit Cycle Scenes List File Not Found: {alosScenes}")
+    print(
+        "Please ensure the file exists in the ALOS_ENV/Orbit_Cycles folder mounted in the Docker image data location."
+    )
+    sys.exit()
 
 for index, row in alosDF.iterrows():
 
