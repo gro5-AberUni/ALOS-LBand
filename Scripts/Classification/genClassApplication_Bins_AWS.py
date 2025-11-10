@@ -54,9 +54,7 @@ for index, row in alosDF.iterrows():
     print(hh)
     print(os.path.exists(hh))
 
-
-
-    if os.path.exists(hh) == True:
+    if os.path.exists(hh):
         hv = os.path.abspath('{0}{1}_WBDR2.2GUD_HV_SLP.tif'.format(dataLoc,basename))
         lin = os.path.abspath('{0}{1}_WBDR2.2GUD_LIN.tif'.format(dataLoc,basename))
 
@@ -88,6 +86,8 @@ for index, row in alosDF.iterrows():
         date = datetime.date(yr, mnth, day)
         print(date)
 
+        orbitCycle = None
+
         for index, row in cycleLinkDF.iterrows():
             # print(row)
             startStr = row['Start']
@@ -108,10 +108,11 @@ for index, row in alosDF.iterrows():
 
             if startDTObj <= date <= endDTObj:
                 orbitCycle = row['Cycle']
-        print(orbitCycle)
-
-
-
+        if orbitCycle is None:
+            print(f'No Orbit Cycle Found for Date: {date}')
+            sys.exit()
+        else:
+            print(f"Orbit Cycle Found: {orbitCycle}")
 
         #### HAND ####
 
