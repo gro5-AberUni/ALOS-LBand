@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 import os
 import rsgislib
+from rsgislib import imageutils
 import numpy as np
 
 rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
