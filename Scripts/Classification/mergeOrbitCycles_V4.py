@@ -2,10 +2,7 @@ import pandas as pd
 import glob
 import os
 import rsgislib
-from rsgislib import imageutils
 import numpy as np
-from osgeo import gdal
-
 
 rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
 
@@ -15,7 +12,8 @@ datesPD = pd.read_csv(csvDates)
 
 print(datesPD)
 
-cwd=os.getcwd()
+# cwd=os.getcwd()
+data_dir = '/data/'
 
 for index, row in datesPD.iterrows():
     orbitCycle = row['Cycle']
@@ -27,16 +25,21 @@ for index, row in datesPD.iterrows():
         orbitCycle = '{0}'.format(orbitCycle)
     print(orbitCycle)
     listOrbitRowsClassDirs = glob.glob('./ALOS-Output*-{0}_1*/'.format(orbitCycle))
+
+    if len(listOrbitRowsClassDirs) == 0:
+        continue # Go to next if no data for this orbit cycle
+
     listMergeFiles = []
     for dir in listOrbitRowsClassDirs:
         os.chdir(dir)
         try:
             listMergeFiles.append(os.path.abspath(glob.glob('*Classified*.tif')[0]))
-        except:
+        except Exception as e:
             print('No Classified Image Found')
-        os.chdir(cwd)
+            print(e)
+        os.chdir(data_dir)
 
-    classFile = 'Classified_Output_Orbit-Cycle_{0}_Total.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
+    classFile = f"Classified_Output_Orbit-Cycle_{orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-')}_Total.tif"
     if len(listOrbitRowsClassDirs)!=0:
         rsgislib.imageutils.create_img_mosaic(listMergeFiles, classFile, 0, 0, 1,1, 'GTIFF', 1)
 
@@ -67,7 +70,6 @@ for index, row in datesPD.iterrows():
     if len(uniqueRSP) > 0:
         print(uniqueRSP)
 
-
     listEven = []
     listOdd = []
     for rsp in listRSP:
@@ -78,7 +80,7 @@ for index, row in datesPD.iterrows():
             listOdd.append(rsp)
     print(listEven)
     print(listOdd)
-    
+
     uniqueEven = np.unique(listEven)
     uniqueOdd = np.unique(listOdd)
 
@@ -95,14 +97,14 @@ for index, row in datesPD.iterrows():
             os.chdir(dir)
             try:
                 listEvenImg.append(os.path.abspath(glob.glob('*Classified*SLopeM*.tif')[0]))
-            except:
+            except Exception as e:
                 print('No Classified Image Found')
-            os.chdir(cwd)
+                print(e)
+            os.chdir(data_dir)
         classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Even-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
         rsgislib.imageutils.create_img_mosaic(listEvenImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
         print(listEvenImg)
-
 
         clr_lut = dict()
         clr_lut[0] = '#000000'
@@ -116,8 +118,6 @@ for index, row in datesPD.iterrows():
         rsgislib.imageutils.define_colour_table(classFile, clr_lut)
         rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
 
-
-
     #### Gather all Odd Files ####
 
     listOddImg = []
@@ -127,9 +127,10 @@ for index, row in datesPD.iterrows():
             os.chdir(dir)
             try:
                 listOddImg.append(os.path.abspath(glob.glob('*Classified*SLopeM*.tif')[0]))
-            except:
+            except Exception as e:
                 print('No Classified Image Found')
-            os.chdir(cwd)
+                print(e)
+            os.chdir(data_dir)
         classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Odd-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
         rsgislib.imageutils.create_img_mosaic(listOddImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
@@ -145,7 +146,3 @@ for index, row in datesPD.iterrows():
 
         rsgislib.imageutils.define_colour_table(classFile, clr_lut)
         rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
-
-
-        
-
