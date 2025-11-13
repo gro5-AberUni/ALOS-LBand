@@ -47,15 +47,7 @@ for index, row in datesPD.iterrows():
         print(f'No data found for Orbit Cycle: {orbitCycle}')
         continue # Go to next if no data for this orbit cycle
 
-    listMergeFiles = []
-    for dir in listOrbitRowsClassDirs:
-        os.chdir(dir)
-        try:
-            listMergeFiles.append(os.path.abspath(glob.glob('*Classified*.tif')[0]))
-        except Exception as e:
-            print('No Classified Image Found')
-            print(e)
-        os.chdir(data_dir)
+    listMergeFiles = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_1*/*Classified*.tif")
 
     classFile = f"Classified_Output_Orbit-Cycle_{orbitCycle}_Total.tif"
     if len(listOrbitRowsClassDirs)!=0:
@@ -63,32 +55,15 @@ for index, row in datesPD.iterrows():
 
     #### Get Even Orbit Paths ####
 
-    listRSP = []
-    for fn in listMergeFiles:
-        rsp = fn.split('/')[-1].split('_')[-2][:3]
-        print(rsp)
-        listRSP.append(rsp)
+    listRSP = [fn.split("/")[-1].split("_")[-2][:3] for fn in listMergeFiles]
+
     uniqueRSP = np.unique(listRSP)
 
     print(listRSP)
     print(uniqueRSP)
 
-    # if len(uniqueRSP) > 0:
-    #     print(uniqueRSP)
-
-    listEven = []
-    listOdd = []
-    for rsp in listRSP:
-        rspInt = int(rsp)
-        if rspInt % 2 == 0:
-            listEven.append(rsp)
-        else:
-            listOdd.append(rsp)
-    print(listEven)
-    print(listOdd)
-
-    uniqueEven = np.unique(listEven)
-    uniqueOdd = np.unique(listOdd)
+    uniqueEven = np.unique([rsp for rsp in listRSP if int(rsp) % 2 == 0])
+    uniqueOdd = np.unique([rsp for rsp in listRSP if int(rsp) % 2 != 0])
 
     print(uniqueEven)
     print(uniqueOdd)
@@ -97,17 +72,15 @@ for index, row in datesPD.iterrows():
 
     listEvenImg = []
     for evRSP in uniqueEven:
-        listOrbitRowsClassDirs = glob.glob('ALOS-Output*-{0}_{1}*'.format(orbitCycle,evRSP))
-        print(listOrbitRowsClassDirs)
-        for dir in listOrbitRowsClassDirs:
-            os.chdir(dir)
-            try:
-                listEvenImg.append(os.path.abspath(glob.glob('*Classified*SLopeM*.tif')[0]))
-            except Exception as e:
-                print('No Classified Image Found')
-                print(e)
-            os.chdir(data_dir)
-        classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Even-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
+
+        files = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_{evRSP}*/*Classified*SLopeM*.tif")
+        if len(files) == 0:
+            print(f'No Even Images Found for RSP: {evRSP} in Orbit Cycle: {orbitCycle}')
+        else:
+            listEvenImg.extend(files)
+    
+    classFile = f'Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Even-RSP_AWS.tif'
+
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listEvenImg, classFile, CLASS_COLOR_LUT)
 
@@ -115,15 +88,13 @@ for index, row in datesPD.iterrows():
 
     listOddImg = []
     for oddRSP in uniqueOdd:
-        listOrbitRowsClassDirs = glob.glob('ALOS-Output*-{0}_{1}*'.format(orbitCycle,oddRSP))
-        for dir in listOrbitRowsClassDirs:
-            os.chdir(dir)
-            try:
-                listOddImg.append(os.path.abspath(glob.glob('*Classified*SLopeM*.tif')[0]))
-            except Exception as e:
-                print('No Classified Image Found')
-                print(e)
-            os.chdir(data_dir)
-        classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Odd-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
+        files = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_{oddRSP}*/*Classified*SLopeM*.tif")
+        if len(files) == 0:
+            print(f'No Odd Images Found for RSP: {oddRSP} in Orbit Cycle: {orbitCycle}')
+        else:
+            listOddImg.extend(files)
+    
+    classFile = f'Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
+    break
