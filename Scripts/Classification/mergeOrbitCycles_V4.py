@@ -25,7 +25,7 @@ for index, row in datesPD.iterrows():
     elif orbitCycle < 100:
         orbitCycle = '{0}'.format(orbitCycle)
     print(orbitCycle)
-    listOrbitRowsClassDirs = glob.glob('./ALOS-Output*-{0}_1*/'.format(orbitCycle))
+    listOrbitRowsClassDirs = glob.glob(f'{data_dir}/ALOS-Output*-{orbitCycle}_1*/')
 
     if len(listOrbitRowsClassDirs) == 0:
         continue # Go to next if no data for this orbit cycle
