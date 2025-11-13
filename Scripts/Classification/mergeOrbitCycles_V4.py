@@ -13,21 +13,38 @@ datesPD = pd.read_csv(csvDates)
 
 print(datesPD)
 
+
+CLASS_COLOR_LUT = {
+    0: "#000000",
+    1: "#6CABDD",
+    2: "#000080",
+    4: "#004225",
+    5: "#a7a7a7",
+    6: "#d21255",
+    7: "#FFFFFF",
+}
+
+def create_classified_mosaic(img_list, output_file, color_lut):
+    if len(img_list) > 0:
+        rsgislib.imageutils.create_img_mosaic(
+            img_list, output_file, 0, 0, 1, 1, "GTIFF", 1
+        )
+        rsgislib.imageutils.define_colour_table(output_file, color_lut)
+        rsgislib.imageutils.pop_thmt_img_stats(output_file, add_clr_tab=False)
+
+
 # cwd=os.getcwd()
 data_dir = '/data/'
 
 for index, row in datesPD.iterrows():
     orbitCycle = row['Cycle']
-    print(orbitCycle)
-    if orbitCycle < 10:
-        orbitCycle = '00{0}'.format(orbitCycle)
+    orbitCycle = str(orbitCycle).zfill(3)
+    print(f'Starting orbitCycle {orbitCycle}')
 
-    elif orbitCycle < 100:
-        orbitCycle = '{0}'.format(orbitCycle)
-    print(orbitCycle)
     listOrbitRowsClassDirs = glob.glob(f'{data_dir}/ALOS-Output*-{orbitCycle}_1*/')
 
     if len(listOrbitRowsClassDirs) == 0:
+        print(f'No data found for Orbit Cycle: {orbitCycle}')
         continue # Go to next if no data for this orbit cycle
 
     listMergeFiles = []
@@ -40,21 +57,9 @@ for index, row in datesPD.iterrows():
             print(e)
         os.chdir(data_dir)
 
-    classFile = f"Classified_Output_Orbit-Cycle_{orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-')}_Total.tif"
+    classFile = f"Classified_Output_Orbit-Cycle_{orbitCycle}_Total.tif"
     if len(listOrbitRowsClassDirs)!=0:
-        rsgislib.imageutils.create_img_mosaic(listMergeFiles, classFile, 0, 0, 1,1, 'GTIFF', 1)
-
-        clr_lut = dict()
-        clr_lut[0] = '#000000'
-        clr_lut[1] = '#6CABDD'
-        clr_lut[2] = '#000080'
-        clr_lut[4] = '#004225'
-        clr_lut[5] = '#a7a7a7'
-        clr_lut[6] = '#d21255'
-        clr_lut[7] = '#FFFFFF'
-
-        rsgislib.imageutils.define_colour_table(classFile, clr_lut)
-        rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
+        create_classified_mosaic(listMergeFiles, classFile, CLASS_COLOR_LUT)
 
     #### Get Even Orbit Paths ####
 
@@ -68,8 +73,8 @@ for index, row in datesPD.iterrows():
     print(listRSP)
     print(uniqueRSP)
 
-    if len(uniqueRSP) > 0:
-        print(uniqueRSP)
+    # if len(uniqueRSP) > 0:
+    #     print(uniqueRSP)
 
     listEven = []
     listOdd = []
@@ -104,20 +109,7 @@ for index, row in datesPD.iterrows():
             os.chdir(data_dir)
         classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Even-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
-        rsgislib.imageutils.create_img_mosaic(listEvenImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
-        print(listEvenImg)
-
-        clr_lut = dict()
-        clr_lut[0] = '#000000'
-        clr_lut[1] = '#6CABDD'
-        clr_lut[2] = '#000080'
-        clr_lut[4] = '#004225'
-        clr_lut[5] = '#a7a7a7'
-        clr_lut[6] = '#d21255'
-        clr_lut[7] = '#FFFFFF'
-
-        rsgislib.imageutils.define_colour_table(classFile, clr_lut)
-        rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
+        create_classified_mosaic(listEvenImg, classFile, CLASS_COLOR_LUT)
 
     #### Gather all Odd Files ####
 
@@ -134,16 +126,4 @@ for index, row in datesPD.iterrows():
             os.chdir(data_dir)
         classFile = 'Classified_Output_Orbit-Cycle_{0}-Dated-{1}_{2}_Odd-RSP_AWS.tif'.format(orbitCycle,row['Start'].replace('/','-'),row['End'].replace('/','-'))
     if len(listOrbitRowsClassDirs)!=0:
-        rsgislib.imageutils.create_img_mosaic(listOddImg, classFile, 0, 0, 1,1, 'GTIFF', 1)
-
-        clr_lut = dict()
-        clr_lut[0] = '#000000'
-        clr_lut[1] = '#6CABDD'
-        clr_lut[2] = '#000080'
-        clr_lut[4] = '#004225'
-        clr_lut[5] = '#a7a7a7'
-        clr_lut[6] = '#d21255'
-        clr_lut[7] = '#FFFFFF'
-
-        rsgislib.imageutils.define_colour_table(classFile, clr_lut)
-        rsgislib.imageutils.pop_thmt_img_stats(classFile,add_clr_tab=False)
+        create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
