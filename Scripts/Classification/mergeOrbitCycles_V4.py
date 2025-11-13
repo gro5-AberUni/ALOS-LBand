@@ -13,7 +13,6 @@ datesPD = pd.read_csv(csvDates)
 
 print(datesPD)
 
-
 CLASS_COLOR_LUT = {
     0: "#000000",
     1: "#6CABDD",
@@ -95,6 +94,6 @@ for index, row in datesPD.iterrows():
             listOddImg.extend(files)
     
     classFile = f'Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
+
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
-    break
