@@ -5,6 +5,7 @@ from rsgislib import imageutils
 import numpy as np
 import logging
 import gc
+import os
 
 # Configure logging
 logging.basicConfig(
@@ -13,6 +14,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
+
+# Configure GDAL to use all available CPU cores
+os.environ['GDAL_NUM_THREADS'] = 'ALL_CPUS'
+# Or set to a specific number: os.environ['GDAL_NUM_THREADS'] = '8'
 
 csvDates = 'Cycle_Dates_TS.csv' # Could/should pass this as an argument
 
