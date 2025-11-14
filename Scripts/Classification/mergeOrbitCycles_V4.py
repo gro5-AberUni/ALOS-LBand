@@ -48,7 +48,7 @@ for index, row in datesPD.iterrows():
 
     listMergeFiles = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_1*/*Classified*.tif")
 
-    classFile = f"Classified_Output_Orbit-Cycle_{orbitCycle}_Total.tif"
+    classFile = f"{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}_Total.tif"
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listMergeFiles, classFile, CLASS_COLOR_LUT)
 
@@ -78,7 +78,7 @@ for index, row in datesPD.iterrows():
         else:
             listEvenImg.extend(files)
     
-    classFile = f'Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Even-RSP_AWS.tif'
+    classFile = f'{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Even-RSP_AWS.tif'
 
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listEvenImg, classFile, CLASS_COLOR_LUT)
@@ -93,7 +93,7 @@ for index, row in datesPD.iterrows():
         else:
             listOddImg.extend(files)
     
-    classFile = f'Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
+    classFile = f'{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
 
     if len(listOrbitRowsClassDirs)!=0:
         create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
