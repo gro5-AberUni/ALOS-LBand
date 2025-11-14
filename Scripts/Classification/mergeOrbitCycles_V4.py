@@ -4,6 +4,7 @@ import rsgislib
 from rsgislib import imageutils
 import numpy as np
 import logging
+import gc
 
 # Configure logging
 logging.basicConfig(
@@ -97,8 +98,13 @@ for index, row in datesPD.iterrows():
             logger.info(f'No Odd Images Found for RSP: {oddRSP} in Orbit Cycle: {orbitCycle}')
         else:
             listOddImg.extend(files)
-
+    
     classFile = f'{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
 
     if len(listOddImg) != 0:
         create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
+    
+    # Clean up memory at end of each orbit cycle
+    del listMergeFiles, listRSP, uniqueRSP, uniqueEven, uniqueOdd
+    del listEvenImg, listOddImg, listOrbitRowsClassDirs
+    gc.collect()
