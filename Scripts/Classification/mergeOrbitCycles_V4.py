@@ -1,9 +1,15 @@
 import pandas as pd
 import glob
-import os
 import rsgislib
 from rsgislib import imageutils
 import numpy as np
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
 
@@ -11,7 +17,7 @@ csvDates = 'Cycle_Dates_TS.csv'
 
 datesPD = pd.read_csv(csvDates)
 
-print(datesPD)
+logger.info(f"Loaded cycle dates:\n{datesPD}")
 
 CLASS_COLOR_LUT = {
     0: "#000000",
@@ -38,12 +44,12 @@ data_dir = '/data/'
 for index, row in datesPD.iterrows():
     orbitCycle = row['Cycle']
     orbitCycle = str(orbitCycle).zfill(3)
-    print(f'Starting orbitCycle {orbitCycle}')
-
+    logger.info(f'Starting orbitCycle {orbitCycle}')
+    
     listOrbitRowsClassDirs = glob.glob(f'{data_dir}/ALOS-Output*-{orbitCycle}_1*/')
-
+    
     if len(listOrbitRowsClassDirs) == 0:
-        print(f'No data found for Orbit Cycle: {orbitCycle}')
+        logger.info(f'No data found for Orbit Cycle: {orbitCycle}')
         continue # Go to next if no data for this orbit cycle
 
     listMergeFiles = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_1*/*Classified*.tif")
@@ -54,18 +60,17 @@ for index, row in datesPD.iterrows():
 
     #### Get Even Orbit Paths ####
 
-    listRSP = [fn.split("/")[-1].split("_")[-2][:3] for fn in listMergeFiles]
-
+    listRSP = [fn.split('/')[-1].split('_')[-2][:3] for fn in listMergeFiles]
     uniqueRSP = np.unique(listRSP)
 
-    print(listRSP)
-    print(uniqueRSP)
+    logger.info(f'All RSPs: {listRSP}')
+    logger.info(f'Unique RSPs: {uniqueRSP}')
 
     uniqueEven = np.unique([rsp for rsp in listRSP if int(rsp) % 2 == 0])
     uniqueOdd = np.unique([rsp for rsp in listRSP if int(rsp) % 2 != 0])
 
-    print(uniqueEven)
-    print(uniqueOdd)
+    logger.info(uniqueEven)
+    logger.info(uniqueOdd)
 
     #### Gather all Even Files ####
 
@@ -74,7 +79,7 @@ for index, row in datesPD.iterrows():
 
         files = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_{evRSP}*/*Classified*SLopeM*.tif")
         if len(files) == 0:
-            print(f'No Even Images Found for RSP: {evRSP} in Orbit Cycle: {orbitCycle}')
+            logger.info(f'No Even Images Found for RSP: {evRSP} in Orbit Cycle: {orbitCycle}')
         else:
             listEvenImg.extend(files)
     
@@ -89,7 +94,7 @@ for index, row in datesPD.iterrows():
     for oddRSP in uniqueOdd:
         files = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_{oddRSP}*/*Classified*SLopeM*.tif")
         if len(files) == 0:
-            print(f'No Odd Images Found for RSP: {oddRSP} in Orbit Cycle: {orbitCycle}')
+            logger.info(f'No Odd Images Found for RSP: {oddRSP} in Orbit Cycle: {orbitCycle}')
         else:
             listOddImg.extend(files)
     
