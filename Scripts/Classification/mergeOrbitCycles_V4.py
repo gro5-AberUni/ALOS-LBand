@@ -13,11 +13,13 @@ logger = logging.getLogger(__name__)
 
 rsgislib.imageutils.set_env_vars_lzw_gtiff_outs(True)
 
-csvDates = 'Cycle_Dates_TS.csv'
+csvDates = 'Cycle_Dates_TS.csv' # Could/should pass this as an argument
 
-datesPD = pd.read_csv(csvDates)
-
-logger.info(f"Loaded cycle dates:\n{datesPD}")
+try:
+    datesPD = pd.read_csv(csvDates)
+    logger.info(f"Loaded cycle dates:\n{datesPD}")
+except FileNotFoundError:
+    raise FileNotFoundError(f"CSV file '{csvDates}' not found.")
 
 CLASS_COLOR_LUT = {
     0: "#000000",
@@ -37,17 +39,15 @@ def create_classified_mosaic(img_list, output_file, color_lut):
         rsgislib.imageutils.define_colour_table(output_file, color_lut)
         rsgislib.imageutils.pop_thmt_img_stats(output_file, add_clr_tab=False)
 
-
-# cwd=os.getcwd()
-data_dir = '/data/'
+data_dir = '/data/' # Could/should pass this as an argument
 
 for index, row in datesPD.iterrows():
     orbitCycle = row['Cycle']
     orbitCycle = str(orbitCycle).zfill(3)
     logger.info(f'Starting orbitCycle {orbitCycle}')
-    
+
     listOrbitRowsClassDirs = glob.glob(f'{data_dir}/ALOS-Output*-{orbitCycle}_1*/')
-    
+
     if len(listOrbitRowsClassDirs) == 0:
         logger.info(f'No data found for Orbit Cycle: {orbitCycle}')
         continue # Go to next if no data for this orbit cycle
@@ -55,7 +55,7 @@ for index, row in datesPD.iterrows():
     listMergeFiles = glob.glob(f"{data_dir}/ALOS-Output*-{orbitCycle}_1*/*Classified*.tif")
 
     classFile = f"{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}_Total.tif"
-    if len(listOrbitRowsClassDirs)!=0:
+    if len(listMergeFiles) != 0:
         create_classified_mosaic(listMergeFiles, classFile, CLASS_COLOR_LUT)
 
     #### Get Even Orbit Paths ####
@@ -69,8 +69,8 @@ for index, row in datesPD.iterrows():
     uniqueEven = np.unique([rsp for rsp in listRSP if int(rsp) % 2 == 0])
     uniqueOdd = np.unique([rsp for rsp in listRSP if int(rsp) % 2 != 0])
 
-    logger.info(uniqueEven)
-    logger.info(uniqueOdd)
+    logger.info(f'Unique Even RSPs: {uniqueEven}')
+    logger.info(f'Unique Odd RSPs: {uniqueOdd}')
 
     #### Gather all Even Files ####
 
@@ -82,10 +82,10 @@ for index, row in datesPD.iterrows():
             logger.info(f'No Even Images Found for RSP: {evRSP} in Orbit Cycle: {orbitCycle}')
         else:
             listEvenImg.extend(files)
-    
+
     classFile = f'{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Even-RSP_AWS.tif'
 
-    if len(listOrbitRowsClassDirs)!=0:
+    if len(listEvenImg) != 0:
         create_classified_mosaic(listEvenImg, classFile, CLASS_COLOR_LUT)
 
     #### Gather all Odd Files ####
@@ -97,8 +97,8 @@ for index, row in datesPD.iterrows():
             logger.info(f'No Odd Images Found for RSP: {oddRSP} in Orbit Cycle: {orbitCycle}')
         else:
             listOddImg.extend(files)
-    
+
     classFile = f'{data_dir}Classified_Output_Orbit-Cycle_{orbitCycle}-Dated-{row["Start"].replace("/","-")}_{row["End"].replace("/","-")}_Odd-RSP_AWS.tif'
 
-    if len(listOrbitRowsClassDirs)!=0:
+    if len(listOddImg) != 0:
         create_classified_mosaic(listOddImg, classFile, CLASS_COLOR_LUT)
